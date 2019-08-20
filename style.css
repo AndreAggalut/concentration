@@ -1,0 +1,24 @@
+#game {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  grid-template-rows: repeat(4, 100px);
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+}
+
+.card {
+  height: 100px;
+  width: 100px;
+  background-color: antiquewhite;
+  border: 1px dotted black;
+  font-size: 2.5rem;
+  font-family: sans-serif;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+}
+
+.card.face-down {
+  background-color: red;
+  /* color: transparent; */
+}
