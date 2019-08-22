@@ -1,4 +1,8 @@
+const SINGLE_FLIP_DURATION = 1500;
+const DOUBLE_FLIP_DURATION = 700;
+
 const faceUpCards = [];
+let firstCardTimer;
 
 function startGame() {
   /* Generate array of emoji pairs in random order */
@@ -26,21 +30,31 @@ function startGame() {
   });
 }
 
-function handleCardClick(event) {
+function handleCardClick(e) {
   // if at least 2 cards are already flipped up, do nothing
   if (faceUpCards.length >= 2) return;
 
-  flipFaceUp(this);
-  this.disabled = true;
-  const cardValue = this.dataset.value;
-  faceUpCards.push(cardValue);
+  flipFaceUp(e.target);
+  // this.disabled = true;
+  faceUpCards.push(e.target);
 
   if (faceUpCards.length === 1) {
+    // first flipped card
+    firstCardTimer = setTimeout(() => flipFaceDown(e.target), SINGLE_FLIP_DURATION);
+  } else {
+    // second flipped card
+    clearTimeout(firstCardTimer);
     setTimeout(() => {
-      flipFaceDown(this);
-      this.removeAttribute('disabled');
-      faceUpCards.length = 0;
-    }, 2000);
+      const [card1, card2] = [faceUpCards[0].dataset.value, faceUpCards[1].dataset.value];
+      // console.log(card1, card2);
+      if (card1 === card2) {
+        handleMatch(faceUpCards);
+        flipFaceDown(faceUpCards[0], faceUpCards[1]);
+        faceUpCards.length = 0;
+      } else {
+        flipFaceDown(faceUpCards[0], faceUpCards[1]);
+      }
+    }, DOUBLE_FLIP_DURATION);
   }
 }
 
@@ -60,9 +74,18 @@ function flipFaceUp(card) {
   card.innerHTML = card.dataset.value;
 }
 
-function flipFaceDown(card) {
-  card.classList.toggle('face-down');
-  card.innerHTML = card.dataset.key;
+function flipFaceDown(...cards) {
+  cards.forEach(card => {
+    card.classList.toggle('face-down');
+    card.innerHTML = card.dataset.key;
+    card.removeAttribute('disabled');
+  });
+  faceUpCards.length = 0;
+}
+
+function handleMatch(args) {
+  console.log('handleMatch args: ', args);
+  console.log('MATCH!');
 }
 
 startGame();

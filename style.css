@@ -24,7 +24,7 @@
   /* color: transparent; */
 }
 
-.card:not(.face-down) {
-  /* opacity: 0; */
+.card.matched {
+  opacity: 0;
   pointer-events: none;
 }
