@@ -27,20 +27,20 @@ function startGame() {
     card.addEventListener('click', handleCardClick);
 
     // // key event listener
-    document.addEventListener('keydown', event => handleCardKeydown(event, card));
+    document.addEventListener('keydown', event => handleKeyPress(event, card));
   });
 }
 
-function handleCardClick(e) {
+function handleCardClick(event) {
   // if same card is clicked twice OR at least 2 cards are already flipped up, do nothing
-  if (faceUpCards.length >= 2 || (faceUpCards.length !== 0 && e.target === faceUpCards[0])) return;
+  if (faceUpCards.length >= 2 || (faceUpCards.length !== 0 && event.target === faceUpCards[0])) return;
 
-  flipFaceUp(e.target);
-  faceUpCards.push(e.target);
+  flipFaceUp(event.target);
+  // faceUpCards.push(e.target);
 
   if (faceUpCards.length === 1) {
     // first flipped card
-    firstCardTimer = setTimeout(() => flipFaceDown(e.target), SINGLE_FLIP_DURATION);
+    firstCardTimer = setTimeout(() => flipFaceDown(event.target), SINGLE_FLIP_DURATION);
   } else {
     // second flipped card
 
@@ -55,20 +55,34 @@ function handleCardClick(e) {
   }
 }
 
-function handleCardKeydown(event, card) {
-  console.log(event);
-  console.log(card);
+function handleKeyPress(event, card) {
+  if (faceUpCards.length >= 2 || (faceUpCards.length !== 0 && card === faceUpCards[0])) return;
+
   if (event.key.toUpperCase() === card.dataset.key) {
     flipFaceUp(card);
-    setTimeout(() => {
-      flipFaceDown(card);
-    }, 2000);
+
+    if (faceUpCards.length === 1) {
+      // first flipped card
+      firstCardTimer = setTimeout(() => flipFaceDown(card), SINGLE_FLIP_DURATION);
+    } else {
+      // second flipped card
+
+      // cancel timer for handling single card flip
+      clearTimeout(firstCardTimer);
+      // set new timer to show flipped up cards for short period
+      setTimeout(() => {
+        const [card1Value, card2Value] = [faceUpCards[0].dataset.value, faceUpCards[1].dataset.value];
+        if (card1Value === card2Value) handleCardsMatch(faceUpCards);
+        else flipFaceDown(faceUpCards[0], faceUpCards[1]);
+      }, DOUBLE_FLIP_DURATION);
+    }
   }
 }
 
 function flipFaceUp(card) {
   card.classList.toggle('face-down');
   card.innerHTML = card.dataset.value;
+  faceUpCards.push(card);
 }
 
 function flipFaceDown(...cards) {
