@@ -3,7 +3,7 @@ const DOUBLE_FLIP_DURATION = 700;
 
 const faceUpCards = [];
 let firstCardTimer;
-let matchCount = 0;
+let matchCount;
 
 function startGame() {
   /* Generate array of emoji pairs in random order */
@@ -12,7 +12,8 @@ function startGame() {
   const shuffled = pairs.sort(() => Math.random() - 0.5);
   console.log(shuffled);
 
-  /* Initialize score */
+  /* Initialize score here */
+  matchCount = 0;
 
   const cards = document.querySelectorAll('.card');
 
@@ -35,7 +36,6 @@ function handleCardClick(e) {
   if (faceUpCards.length >= 2 || (faceUpCards.length !== 0 && e.target === faceUpCards[0])) return;
 
   flipFaceUp(e.target);
-  // this.disabled = true;
   faceUpCards.push(e.target);
 
   if (faceUpCards.length === 1) {
@@ -43,15 +43,14 @@ function handleCardClick(e) {
     firstCardTimer = setTimeout(() => flipFaceDown(e.target), SINGLE_FLIP_DURATION);
   } else {
     // second flipped card
+
+    // cancel timer for handling single card flip
     clearTimeout(firstCardTimer);
+    // set new timer to show flipped up cards for short period
     setTimeout(() => {
-      const [card1, card2] = [faceUpCards[0].dataset.value, faceUpCards[1].dataset.value];
-      // console.log(card1, card2);
-      if (card1 === card2) {
-        handleMatch(faceUpCards);
-        // flipFaceDown(faceUpCards[0], faceUpCards[1]);
-      }
-      flipFaceDown(faceUpCards[0], faceUpCards[1]);
+      const [card1Value, card2Value] = [faceUpCards[0].dataset.value, faceUpCards[1].dataset.value];
+      if (card1Value === card2Value) handleCardsMatch(faceUpCards);
+      else flipFaceDown(faceUpCards[0], faceUpCards[1]);
     }, DOUBLE_FLIP_DURATION);
   }
 }
@@ -76,17 +75,17 @@ function flipFaceDown(...cards) {
   cards.forEach(card => {
     card.classList.toggle('face-down');
     card.innerHTML = card.dataset.key;
-    card.removeAttribute('disabled');
   });
   faceUpCards.length = 0;
 }
 
-function handleMatch(cards) {
-  console.log('handleMatch args: ', cards);
-  matchCount++;
+function handleCardsMatch(cards) {
   console.log('MATCHES: ', matchCount);
   cards[0].classList.add('matched');
   cards[1].classList.add('matched');
+  faceUpCards.length = 0;
+
+  matchCount++;
   if (matchCount === 8) console.log('GAME OVER');
 }
 
