@@ -1,26 +1,83 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet');
+
+html h1 {
+  font-family: "Montserrat", sans-serif;
+  text-shadow: 0px 10px 10px orange;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: antiquewhite;
+}
+
+html h1 {
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  /* Starting position */
+  -moz-transform: translateX(50%);
+  -webkit-transform: translateX(50%);
+  transform: translateX(50%);
+  /* Apply animation to this element */
+  -moz-animation: horizontally 2s linear infinite alternate;
+  -webkit-animation: horizontally 2s linear infinite alternate;
+  animation: horizontally 2s linear infinite alternate;
+}
+/* Move it (define the animation) */
+@-moz-keyframes horizontally {
+  0% {
+    -moz-transform: translateX(50%);
+  }
+  100% {
+    -moz-transform: translateX(-50%);
+  }
+}
+@-webkit-keyframes horizontally {
+  0% {
+    -webkit-transform: translateX(50%);
+  }
+  100% {
+    -webkit-transform: translateX(-50%);
+  }
+}
+@keyframes horizontally {
+  0% {
+    -moz-transform: translateX(50%); /* Browser bug fix */
+    -webkit-transform: translateX(50%); /* Browser bug fix */
+    transform: translateX(50%);
+  }
+  100% {
+    -moz-transform: translateX(-50%); /* Browser bug fix */
+    -webkit-transform: translateX(-50%); /* Browser bug fix */
+    transform: translateX(-50%);
+  }
+}
 #game {
   display: grid;
   grid-template-columns: repeat(4, 100px);
   grid-template-rows: repeat(4, 100px);
   grid-column-gap: 10px;
   grid-row-gap: 10px;
+  justify-content: center;
+  align-content: center;
+  background-color: hsl(0, 25%, 35%);
+  padding: 70px;
 }
 
 .card {
   height: 100px;
   width: 100px;
   background-color: antiquewhite;
-  border: 1px dotted black;
   font-size: 2.5rem;
   font-family: sans-serif;
   display: grid;
   justify-content: center;
   align-content: center;
+  border-radius: 10px;
 }
 
 .card.face-down {
   background-color: #ffbd66;
-  color: rgba(0,0,0,0.2);
+  color: rgba(0, 0, 0, 0.2);
   /* color: transparent; */
 }
 
@@ -28,4 +85,18 @@
   /* opacity: 0; */
   pointer-events: none;
   visibility: hidden;
+}
+
+#head {
+  display: grid;
+  background: hsl(0, 25%, 35%);
+  padding: 1em;
+
+  text-align: center;
+  font-family: sans-serif;
+}
+
+#button {
+  align-content: center;
+  justify-content: center;
 }
