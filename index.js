@@ -31,8 +31,8 @@ function startGame() {
 }
 
 function handleCardClick(e) {
-  // if at least 2 cards are already flipped up, do nothing
-  if (faceUpCards.length >= 2) return;
+  // if same card is clicked twice OR at least 2 cards are already flipped up, do nothing
+  if (faceUpCards.length >= 2 || (faceUpCards.length !== 0 && e.target === faceUpCards[0])) return;
 
   flipFaceUp(e.target);
   // this.disabled = true;
