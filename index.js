@@ -3,6 +3,7 @@ const DOUBLE_FLIP_DURATION = 700;
 
 const faceUpCards = [];
 let firstCardTimer;
+let matchCount = 0;
 
 function startGame() {
   /* Generate array of emoji pairs in random order */
@@ -12,7 +13,6 @@ function startGame() {
   console.log(shuffled);
 
   /* Initialize score */
-  const matchCount = 0;
 
   const cards = document.querySelectorAll('.card');
 
@@ -26,7 +26,7 @@ function startGame() {
     card.addEventListener('click', handleCardClick);
 
     // // key event listener
-    // document.addEventListener('keydown', (event, sameCard) => handleCardKeydown(event, sameCard));
+    document.addEventListener('keydown', event => handleCardKeydown(event, card));
   });
 }
 
@@ -49,16 +49,14 @@ function handleCardClick(e) {
       // console.log(card1, card2);
       if (card1 === card2) {
         handleMatch(faceUpCards);
-        flipFaceDown(faceUpCards[0], faceUpCards[1]);
-        faceUpCards.length = 0;
-      } else {
-        flipFaceDown(faceUpCards[0], faceUpCards[1]);
+        // flipFaceDown(faceUpCards[0], faceUpCards[1]);
       }
+      flipFaceDown(faceUpCards[0], faceUpCards[1]);
     }, DOUBLE_FLIP_DURATION);
   }
 }
 
-/* function handleCardKeydown(event, card) {
+function handleCardKeydown(event, card) {
   console.log(event);
   console.log(card);
   if (event.key.toUpperCase() === card.dataset.key) {
@@ -67,7 +65,7 @@ function handleCardClick(e) {
       flipFaceDown(card);
     }, 2000);
   }
-} */
+}
 
 function flipFaceUp(card) {
   card.classList.toggle('face-down');
@@ -83,9 +81,13 @@ function flipFaceDown(...cards) {
   faceUpCards.length = 0;
 }
 
-function handleMatch(args) {
-  console.log('handleMatch args: ', args);
-  console.log('MATCH!');
+function handleMatch(cards) {
+  console.log('handleMatch args: ', cards);
+  matchCount++;
+  console.log('MATCHES: ', matchCount);
+  cards[0].classList.add('matched');
+  cards[1].classList.add('matched');
+  if (matchCount === 8) console.log('GAME OVER');
 }
 
 startGame();
