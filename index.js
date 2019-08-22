@@ -126,11 +126,15 @@ function handleCardsMatch(cards) {
   playMatchSound();
 
   matchCount++;
-  if (matchCount === 8) console.log('GAME OVER');
+  if (matchCount === 8) {
+    console.log('GAME OVER');
+    playWinSounds();
+  }
 }
 
 const x = document.getElementById('match');
 const y = document.getElementById('nomatch');
+const z = document.getElementById('win');
 
 function playMatchSound() {
   x.play();
@@ -138,6 +142,9 @@ function playMatchSound() {
 
 function playNoMatchSound() {
   y.play();
+}
+function playWinSounds() {
+  z.play();
 }
 
 startGame();
