@@ -1,5 +1,5 @@
 const SINGLE_FLIP_DURATION = 1500;
-const DOUBLE_FLIP_DURATION = 700;
+const DOUBLE_FLIP_DURATION = 500;
 
 const faceUpCards = [];
 let firstCardTimer;

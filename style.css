@@ -14,13 +14,13 @@ html h1 {
   margin: 0;
   text-align: center;
   /* Starting position */
-  -moz-transform: translateX(50%);
+  /* -moz-transform: translateX(50%);
   -webkit-transform: translateX(50%);
-  transform: translateX(50%);
+  transform: translateX(50%); */
   /* Apply animation to this element */
-  -moz-animation: horizontally 2s linear infinite alternate;
+  /* -moz-animation: horizontally 2s linear infinite alternate;
   -webkit-animation: horizontally 2s linear infinite alternate;
-  animation: horizontally 2s linear infinite alternate;
+  animation: horizontally 2s linear infinite alternate; */
 }
 /* Move it (define the animation) */
 @-moz-keyframes horizontally {
@@ -55,8 +55,8 @@ html h1 {
   display: grid;
   grid-template-columns: repeat(4, 100px);
   grid-template-rows: repeat(4, 100px);
-  grid-column-gap: 10px;
-  grid-row-gap: 10px;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
   justify-content: center;
   align-content: center;
   background-color: hsl(0, 25%, 35%);
@@ -78,13 +78,12 @@ html h1 {
 .card.face-down {
   background-color: #ffbd66;
   color: rgba(0, 0, 0, 0.2);
-  /* color: transparent; */
 }
 
 .card.matched {
-  /* opacity: 0; */
+  box-shadow: 0px 0px 15px 3px rgba(248, 238, 98, 0.75);
   pointer-events: none;
-  visibility: hidden;
+  animation: .3s pop forwards;
 }
 
 #head {
@@ -99,4 +98,10 @@ html h1 {
 #button {
   align-content: center;
   justify-content: center;
+}
+
+@keyframes pop {
+  0% { transform: scale(1) }
+  70% { transform: scale(1.1); opacity: 1;}
+  100% { transform: scale(0); opacity: 0;}
 }
