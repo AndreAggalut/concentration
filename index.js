@@ -1,14 +1,23 @@
 const SINGLE_FLIP_DURATION = 1500;
-const DOUBLE_FLIP_DURATION = 500;
+const DOUBLE_FLIP_DURATION = 400;
+const KEYS = ['1', '2', '3', '4', 'Q', 'W', 'E', 'R', 'A', 'S', 'D', 'F', 'Z', 'X', 'C', 'V'];
+const EMOJIS = ['😀', '💩', '🍆', '🌮', '🔥', '💯', '🍿', '🍑'];
 
 const faceUpCards = [];
 let firstCardTimer;
 let matchCount;
 
+function handleButtonClick() {
+  startGame();
+
+  document.getElementById('control').classList.toggle('hidden');
+  document.getElementById('board').classList.toggle('hidden');
+  document.getElementById('start-button').innerHTML = 'RESTART';
+}
+
 function startGame() {
   /* Generate array of emoji pairs in random order */
-  const emojis = ['😀', '💩', '🍆', '🌮', '🔥', '💯', '🍿', '🍑'];
-  const pairs = emojis.concat(...emojis);
+  const pairs = EMOJIS.concat(...EMOJIS);
   const shuffled = pairs.sort(() => Math.random() - 0.5);
   console.log(shuffled);
 
@@ -18,7 +27,10 @@ function startGame() {
   const cards = document.querySelectorAll('.card');
   cards.forEach((card, i) => {
     card.setAttribute('data-value', shuffled[i]);
-    card.setAttribute('data-key', card.innerHTML);
+    card.setAttribute('data-key', KEYS[i]);
+    card.innerHTML = KEYS[i];
+    card.classList.remove('matched');
+    card.classList.add('face-down');
 
     // attach click and key event listeners
     card.addEventListener('click', event => handleInput(event, card));
@@ -71,9 +83,14 @@ function handleCardsMatch(cards) {
   faceUpCards.length = 0;
 
   matchCount++;
-  if (matchCount === 8) console.log('GAME OVER');
+  if (matchCount === 8) handleWin();
 }
 
-startGame();
+function handleWin() {
+  document.getElementById('control').classList.toggle('hidden');
+  document.getElementById('board').classList.toggle('hidden');
+}
+
+// startGame();
 /* const startButton = document.querySelector('button');
 startButton.addEventListener('click', () => startGame()); */
