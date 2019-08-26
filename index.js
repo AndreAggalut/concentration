@@ -25,6 +25,7 @@ function startGame() {
   matchCount = 0;
 
   const cards = document.querySelectorAll('.card');
+  console.log(cards);
   cards.forEach((card, i) => {
     card.setAttribute('data-value', shuffled[i]);
     card.setAttribute('data-key', KEYS[i]);
@@ -75,20 +76,38 @@ function flipFaceDown(...cards) {
     card.innerHTML = card.dataset.key;
   });
   faceUpCards.length = 0;
+  playNoMatchSound();
 }
 
 function handleCardsMatch(cards) {
   cards[0].classList.add('matched');
   cards[1].classList.add('matched');
   faceUpCards.length = 0;
+  playMatchSound();
 
   matchCount++;
   if (matchCount === 8) handleWin();
 }
 
 function handleWin() {
+  playWinSounds();
   document.getElementById('control').classList.toggle('hidden');
   document.getElementById('board').classList.toggle('hidden');
+}
+
+const x = document.getElementById('match');
+const y = document.getElementById('nomatch');
+const z = document.getElementById('win');
+
+function playMatchSound() {
+  x.play();
+}
+
+function playNoMatchSound() {
+  y.play();
+}
+function playWinSounds() {
+  z.play();
 }
 
 // startGame();
