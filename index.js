@@ -1,5 +1,5 @@
 const SINGLE_FLIP_DURATION = 1500;
-const DOUBLE_FLIP_DURATION = 700;
+const DOUBLE_FLIP_DURATION = 500;
 
 const faceUpCards = [];
 let firstCardTimer;
@@ -12,85 +12,44 @@ function startGame() {
   const shuffled = pairs.sort(() => Math.random() - 0.5);
   console.log(shuffled);
 
-  /* Initialize score here */
+  /* Initialize score */
   matchCount = 0;
 
   const cards = document.querySelectorAll('.card');
-
+  console.log(cards);
   cards.forEach((card, i) => {
-    // card.innerHTML = shuffled[i];
-    const sameCard = card;
     card.setAttribute('data-value', shuffled[i]);
     card.setAttribute('data-key', card.innerHTML);
 
-    // click event listener
-    card.addEventListener('click', handleCardClick);
-
-    // // key event listener
-    document.addEventListener('keydown', event => handleKeyPress(event, card));
+    // attach click and key event listeners
+    card.addEventListener('click', event => handleInput(event, card));
+    document.addEventListener('keydown', event => handleInput(event, card));
   });
 }
 
-function handleCardClick(event) {
-  // if same card is clicked twice OR at least 2 cards are already flipped up, do nothing
-  if (
-    faceUpCards.length >= 2 ||
-    (faceUpCards.length !== 0 && event.target === faceUpCards[0])
-  )
-    return;
-
-  flipFaceUp(event.target);
-  // faceUpCards.push(e.target);
-
-  if (faceUpCards.length === 1) {
-    // first flipped card
-    firstCardTimer = setTimeout(
-      () => flipFaceDown(event.target),
-      SINGLE_FLIP_DURATION
-    );
-  } else {
-    // second flipped card
-
-    // cancel timer for handling single card flip
-    clearTimeout(firstCardTimer);
-    const [card1Value, card2Value] = [
-      faceUpCards[0].dataset.value,
-      faceUpCards[1].dataset.value,
-    ];
-    const isMatch = card1Value === card2Value;
-    if (isMatch) playMatchSound();
-    else playNoMatchSound();
-
-    // set new timer to show flipped up cards for short period
-    setTimeout(() => {
-      if (isMatch) handleCardsMatch(faceUpCards);
-      else flipFaceDown(faceUpCards[0], faceUpCards[1]);
-    }, DOUBLE_FLIP_DURATION);
-  }
-}
-
-function handleKeyPress(event, card) {
+function handleInput(event, card) {
+  // do nothing if already two cards flipped up OR same card is doubleclicked
   if (
     faceUpCards.length >= 2 ||
     (faceUpCards.length !== 0 && card === faceUpCards[0])
   )
     return;
 
-  if (event.key.toUpperCase() === card.dataset.key) {
+  if (event.type === 'click' || event.key.toUpperCase() === card.dataset.key) {
     flipFaceUp(card);
 
     if (faceUpCards.length === 1) {
-      // first flipped card
+      // for first flipped card
       firstCardTimer = setTimeout(
         () => flipFaceDown(card),
         SINGLE_FLIP_DURATION
       );
     } else {
-      // second flipped card
+      // for second flipped card
 
       // cancel timer for handling single card flip
       clearTimeout(firstCardTimer);
-      // set new timer to show flipped up cards for short period
+      // start a new timer to show flipped up cards for short period
       setTimeout(() => {
         const [card1Value, card2Value] = [
           faceUpCards[0].dataset.value,
@@ -119,7 +78,6 @@ function flipFaceDown(...cards) {
 }
 
 function handleCardsMatch(cards) {
-  console.log('MATCHES: ', matchCount);
   cards[0].classList.add('matched');
   cards[1].classList.add('matched');
   faceUpCards.length = 0;
