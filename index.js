@@ -50,6 +50,7 @@ function handleInput(event, card) {
   if (faceUpCards.length >= 2 || (faceUpCards.length !== 0 && card === faceUpCards[0])) return;
 
   if (event.type === 'click' || event.key.toUpperCase() === card.dataset.key) {
+    playFlipSound();
     flipFaceUp(card);
 
     if (faceUpCards.length === 1) {
@@ -119,17 +120,20 @@ function formatTime(sec) {
   return `${minutes || ''}:${seconds < 10 ? `0${seconds}` : seconds}`;
 }
 
-const x = document.getElementById('match');
-const y = document.getElementById('nomatch');
-const z = document.getElementById('win');
+const matchSound = document.getElementById('match-sound');
+const noMatchSound = document.getElementById('nomatch-sound');
+const flipSound = document.getElementById('flip-sound');
+const winSound = document.getElementById('win');
 
 function playMatchSound() {
-  x.play();
+  matchSound.play();
 }
-
 function playNoMatchSound() {
-  y.play();
+  noMatchSound.play();
+}
+function playFlipSound() {
+  flipSound.play();
 }
 function playWinSounds() {
-  z.play();
+  winSound.play();
 }
