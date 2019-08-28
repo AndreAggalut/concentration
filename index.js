@@ -15,7 +15,7 @@ function handleButtonClick() {
 
   document.getElementById('control').classList.toggle('hidden');
   document.getElementById('cards').classList.toggle('hidden');
-  document.getElementById('timer').classList.toggle('hidden');
+  document.getElementById('timer').classList.remove('hidden');
   document.getElementById('start-button').innerHTML = 'RESTART';
 }
 
