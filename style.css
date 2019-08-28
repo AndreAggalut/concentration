@@ -48,10 +48,6 @@ body {
   /* padding: 70px; */
 }
 
-#cards.hidden {
-  display: none;
-}
-
 .card {
   /* height: 100px;
   width: 100px; */
@@ -106,6 +102,6 @@ body {
   border: none;
 }
 
-#control.hidden{
+#cards.hidden, #control.hidden, #timer.hidden {
   display: none;
 }

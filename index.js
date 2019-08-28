@@ -14,7 +14,8 @@ function handleButtonClick() {
   startGame();
 
   document.getElementById('control').classList.toggle('hidden');
-  document.getElementById('board').classList.toggle('hidden');
+  document.getElementById('cards').classList.toggle('hidden');
+  document.getElementById('timer').classList.toggle('hidden');
   document.getElementById('start-button').innerHTML = 'RESTART';
 }
 
@@ -98,7 +99,7 @@ function handleWin() {
   playWinSounds();
   stopTimer();
   document.getElementById('control').classList.toggle('hidden');
-  document.getElementById('board').classList.toggle('hidden');
+  document.getElementById('cards').classList.toggle('hidden');
 }
 
 function startTimer() {
