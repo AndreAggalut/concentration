@@ -1,37 +1,23 @@
 const SINGLE_FLIP_DURATION = 1500;
 const DOUBLE_FLIP_DURATION = 400;
-const KEYS = [
-  '1',
-  '2',
-  '3',
-  '4',
-  'Q',
-  'W',
-  'E',
-  'R',
-  'A',
-  'S',
-  'D',
-  'F',
-  'Z',
-  'X',
-  'C',
-  'V',
-];
+const KEYS = ['1', '2', '3', '4', 'Q', 'W', 'E', 'R', 'A', 'S', 'D', 'F', 'Z', 'X', 'C', 'V'];
 const EMOJIS = ['😀', '💩', '🍆', '🌮', '🔥', '💯', '🍿', '🍑'];
 
 const faceUpCards = [];
 let firstCardTimer;
 let matchCount;
 let startTime;
+let totalTime;
 let gameTimer;
 const timeDisplay = document.getElementById('timer');
+let bestTime = Infinity;
 
 function handleButtonClick() {
   startGame();
 
-  document.getElementById('control').classList.toggle('hidden');
-  document.getElementById('cards').classList.toggle('hidden');
+  toggleHidden('display-panel');
+  toggleHidden('cards');
+  if (bestTime !== Infinity) toggleHidden('best-time');
   document.getElementById('timer').classList.remove('hidden');
   document.getElementById('start-button').innerHTML = 'RESTART';
 }
@@ -44,8 +30,9 @@ function startGame() {
 
   /* Initialize score */
   matchCount = 0;
+  totalTime = 0;
   startTimer();
-  timeDisplay.innerHTML = ':00';
+  timeDisplay.innerHTML = 'Time :00';
 
   const cards = document.querySelectorAll('.card');
   console.log(cards);
@@ -64,22 +51,15 @@ function startGame() {
 
 function handleInput(event, card) {
   // do nothing if already two cards flipped up OR same card is doubleclicked
-  if (
-    faceUpCards.length >= 2 ||
-    (faceUpCards.length !== 0 && card === faceUpCards[0])
-  )
-    return;
+  if (faceUpCards.length >= 2 || (faceUpCards.length !== 0 && card === faceUpCards[0])) return;
 
   if (event.type === 'click' || event.key.toUpperCase() === card.dataset.key) {
-    playFlipSound();
+    if (!card.classList.contains('matched')) playFlipSound();
     flipFaceUp(card);
 
     if (faceUpCards.length === 1) {
       // for first flipped card
-      firstCardTimer = setTimeout(
-        () => flipFaceDown(card),
-        SINGLE_FLIP_DURATION
-      );
+      firstCardTimer = setTimeout(() => flipFaceDown(card), SINGLE_FLIP_DURATION);
     } else {
       // for second flipped card
 
@@ -87,10 +67,7 @@ function handleInput(event, card) {
       clearTimeout(firstCardTimer);
       // start a new timer to show flipped up cards for short period
       setTimeout(() => {
-        const [card1Value, card2Value] = [
-          faceUpCards[0].dataset.value,
-          faceUpCards[1].dataset.value,
-        ];
+        const [card1Value, card2Value] = [faceUpCards[0].dataset.value, faceUpCards[1].dataset.value];
         if (card1Value === card2Value) handleCardsMatch(faceUpCards);
         else flipFaceDown(faceUpCards[0], faceUpCards[1]);
       }, DOUBLE_FLIP_DURATION);
@@ -126,15 +103,20 @@ function handleCardsMatch(cards) {
 function handleWin() {
   playWinSounds();
   stopTimer();
-  document.getElementById('control').classList.toggle('hidden');
-  document.getElementById('cards').classList.toggle('hidden');
+  if (bestTime > totalTime) bestTime = totalTime;
+  document.getElementById('best-time').innerHTML = `Best Time ${formatTime(bestTime)}`;
+
+  toggleHidden('display-panel');
+  toggleHidden('cards');
+  toggleHidden('best-time');
 }
 
 function startTimer() {
   startTime = Date.now();
   gameTimer = setInterval(() => {
     const secondsElapsed = Math.floor((Date.now() - startTime) / 1000);
-    timeDisplay.innerHTML = formatTime(secondsElapsed);
+    totalTime = secondsElapsed;
+    timeDisplay.innerHTML = `Time ${formatTime(secondsElapsed)}`;
   }, 1000);
 }
 
@@ -145,6 +127,10 @@ function stopTimer() {
 function formatTime(sec) {
   const [minutes, seconds] = [Math.floor(sec / 60), sec % 60];
   return `${minutes || ''}:${seconds < 10 ? `0${seconds}` : seconds}`;
+}
+
+function toggleHidden(id) {
+  document.getElementById(id).classList.toggle('hidden');
 }
 
 const matchSound = document.getElementById('match-sound');

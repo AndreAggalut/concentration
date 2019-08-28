@@ -82,17 +82,20 @@ body {
   100% { transform: scale(0); opacity: 0;}
 }
 
-#control {
+#display-panel {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   height: 30%;
   width: 100%;
 }
 
-#control button {
+#display-panel button {
   flex: 1 0;
   font-size: 3.5rem;
-  margin: 2rem;
+  align-self: stretch;
+  margin: 2rem 0;
   font-family: "Montserrat", sans-serif;
   font-weight: bold;
   outline: none;
@@ -102,11 +105,11 @@ body {
   border: none;
 }
 
-#cards.hidden, #control.hidden, #timer.hidden {
-  display: none;
+.hidden {
+  display: none !important;
 }
 
-#timer {
+#timer, #best-time {
   font-size: 3rem;
   font-family: sans-serif;
   color: blanchedalmond;
