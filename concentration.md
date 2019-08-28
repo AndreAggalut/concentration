@@ -15,7 +15,7 @@
 4. If succesfully matched all cards, the game is over.  
 
 # Project Setup Requirements
-- run npm start
+- Go to website ("")
 
 # Technology in our project
 - HTML
@@ -27,5 +27,5 @@
 
 - Add backgrounds 
 - Have more grid
-- Login to track record
+- Login page to track record
 - Different levels of difficulties

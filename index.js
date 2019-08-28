@@ -1,6 +1,23 @@
 const SINGLE_FLIP_DURATION = 1500;
 const DOUBLE_FLIP_DURATION = 400;
-const KEYS = ['1', '2', '3', '4', 'Q', 'W', 'E', 'R', 'A', 'S', 'D', 'F', 'Z', 'X', 'C', 'V'];
+const KEYS = [
+  '1',
+  '2',
+  '3',
+  '4',
+  'Q',
+  'W',
+  'E',
+  'R',
+  'A',
+  'S',
+  'D',
+  'F',
+  'Z',
+  'X',
+  'C',
+  'V',
+];
 const EMOJIS = ['😀', '💩', '🍆', '🌮', '🔥', '💯', '🍿', '🍑'];
 
 const faceUpCards = [];
@@ -47,7 +64,11 @@ function startGame() {
 
 function handleInput(event, card) {
   // do nothing if already two cards flipped up OR same card is doubleclicked
-  if (faceUpCards.length >= 2 || (faceUpCards.length !== 0 && card === faceUpCards[0])) return;
+  if (
+    faceUpCards.length >= 2 ||
+    (faceUpCards.length !== 0 && card === faceUpCards[0])
+  )
+    return;
 
   if (event.type === 'click' || event.key.toUpperCase() === card.dataset.key) {
     playFlipSound();
@@ -55,7 +76,10 @@ function handleInput(event, card) {
 
     if (faceUpCards.length === 1) {
       // for first flipped card
-      firstCardTimer = setTimeout(() => flipFaceDown(card), SINGLE_FLIP_DURATION);
+      firstCardTimer = setTimeout(
+        () => flipFaceDown(card),
+        SINGLE_FLIP_DURATION
+      );
     } else {
       // for second flipped card
 
@@ -63,7 +87,10 @@ function handleInput(event, card) {
       clearTimeout(firstCardTimer);
       // start a new timer to show flipped up cards for short period
       setTimeout(() => {
-        const [card1Value, card2Value] = [faceUpCards[0].dataset.value, faceUpCards[1].dataset.value];
+        const [card1Value, card2Value] = [
+          faceUpCards[0].dataset.value,
+          faceUpCards[1].dataset.value,
+        ];
         if (card1Value === card2Value) handleCardsMatch(faceUpCards);
         else flipFaceDown(faceUpCards[0], faceUpCards[1]);
       }, DOUBLE_FLIP_DURATION);
