@@ -6,6 +6,9 @@ const EMOJIS = ['😀', '💩', '🍆', '🌮', '🔥', '💯', '🍿', '🍑'];
 const faceUpCards = [];
 let firstCardTimer;
 let matchCount;
+let startTime;
+let gameTimer;
+const timeDisplay = document.getElementById('timer');
 
 function handleButtonClick() {
   startGame();
@@ -23,6 +26,8 @@ function startGame() {
 
   /* Initialize score */
   matchCount = 0;
+  startTimer();
+  timeDisplay.innerHTML = ':00';
 
   const cards = document.querySelectorAll('.card');
   console.log(cards);
@@ -91,8 +96,26 @@ function handleCardsMatch(cards) {
 
 function handleWin() {
   playWinSounds();
+  stopTimer();
   document.getElementById('control').classList.toggle('hidden');
   document.getElementById('board').classList.toggle('hidden');
+}
+
+function startTimer() {
+  startTime = Date.now();
+  gameTimer = setInterval(() => {
+    const secondsElapsed = Math.floor((Date.now() - startTime) / 1000);
+    timeDisplay.innerHTML = formatTime(secondsElapsed);
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(gameTimer);
+}
+
+function formatTime(sec) {
+  const [minutes, seconds] = [Math.floor(sec / 60), sec % 60];
+  return `${minutes || ''}:${seconds < 10 ? `0${seconds}` : seconds}`;
 }
 
 const x = document.getElementById('match');
@@ -109,7 +132,3 @@ function playNoMatchSound() {
 function playWinSounds() {
   z.play();
 }
-
-// startGame();
-/* const startButton = document.querySelector('button');
-startButton.addEventListener('click', () => startGame()); */
