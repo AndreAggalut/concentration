@@ -7,10 +7,6 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Concentration</title>
   <link rel="stylesheet" href="./style.css" />
-  <audio src="/music/correct.wav" id="match-sound"></audio>
-  <audio src="/music/incorrect.wav" id="nomatch-sound"></audio>
-  <audio src="/music/card-flip.wav" id="flip-sound"></audio>
-  <audio src="/music/winsound.mp3" id="win"></audio>
 </head>
 <body>
   <div id="head"><h1>CONCENTRATION</h1></div>
@@ -35,11 +31,16 @@
     </div>
     <div id="display-panel">
       <div id="best-time" class="hidden">Best Time</div>
-      <button id="start-button" onclick="handleButtonClick()">START</button>
+      <button id="start-button" onclick="handleStartButtonClick()">START</button>
     </div>
   </div>
   <p id="timer" class="hidden">Time :00</p>
 </div>
+
+<audio src="/music/correct.wav" id="match-sound"></audio>
+<audio src="/music/incorrect.wav" id="nomatch-sound"></audio>
+<audio src="/music/card-flip.wav" id="flip-sound"></audio>
+<audio src="/music/winsound.mp3" id="win"></audio>
 <script src="./index.js"></script>
 </body>
 </html>

@@ -1,18 +1,16 @@
 const SINGLE_FLIP_DURATION = 1500;
 const DOUBLE_FLIP_DURATION = 400;
+const NUM_PAIRS = 8;
 const KEYS = ['1', '2', '3', '4', 'Q', 'W', 'E', 'R', 'A', 'S', 'D', 'F', 'Z', 'X', 'C', 'V'];
 const EMOJIS = ['😀', '💩', '🍆', '🌮', '🔥', '💯', '🍿', '🍑'];
 
 const faceUpCards = [];
-let firstCardTimer;
-let matchCount;
-let startTime;
+let matchedCount;
 let totalTime;
 let gameTimer;
-const timeDisplay = document.getElementById('timer');
 let bestTime = Infinity;
 
-function handleButtonClick() {
+function handleStartButtonClick() {
   startGame();
 
   toggleHidden('display-panel');
@@ -26,17 +24,14 @@ function startGame() {
   /* Generate array of emoji pairs in random order */
   const pairs = EMOJIS.concat(...EMOJIS);
   const shuffled = pairs.sort(() => Math.random() - 0.5);
-  console.log(shuffled);
 
-  /* Initialize score */
-  matchCount = 0;
+  /* Reset */
+  matchedCount = 0;
   totalTime = 0;
-  startTimer();
-  timeDisplay.innerHTML = 'Time :00';
 
   const cards = document.querySelectorAll('.card');
-  console.log(cards);
   cards.forEach((card, i) => {
+    // assign values to cards and set face down
     card.setAttribute('data-value', shuffled[i]);
     card.setAttribute('data-key', KEYS[i]);
     card.innerHTML = KEYS[i];
@@ -47,6 +42,8 @@ function startGame() {
     card.addEventListener('click', event => handleInput(event, card));
     document.addEventListener('keydown', event => handleInput(event, card));
   });
+
+  startTimer();
 }
 
 function handleInput(event, card) {
@@ -57,16 +54,18 @@ function handleInput(event, card) {
     if (!card.classList.contains('matched')) playFlipSound();
     flipFaceUp(card);
 
+    let firstCardTimer;
     if (faceUpCards.length === 1) {
-      // for first flipped card
+      // if first flipped card
       firstCardTimer = setTimeout(() => flipFaceDown(card), SINGLE_FLIP_DURATION);
     } else {
-      // for second flipped card
+      // if second flipped card
 
       // cancel timer for handling single card flip
       clearTimeout(firstCardTimer);
       // start a new timer to show flipped up cards for short period
       setTimeout(() => {
+        // compare card values
         const [card1Value, card2Value] = [faceUpCards[0].dataset.value, faceUpCards[1].dataset.value];
         if (card1Value === card2Value) handleCardsMatch(faceUpCards);
         else flipFaceDown(faceUpCards[0], faceUpCards[1]);
@@ -96,8 +95,8 @@ function handleCardsMatch(cards) {
   faceUpCards.length = 0;
   playMatchSound();
 
-  matchCount++;
-  if (matchCount === 8) handleWin();
+  matchedCount++;
+  if (matchedCount === NUM_PAIRS) handleWin();
 }
 
 function handleWin() {
@@ -112,11 +111,11 @@ function handleWin() {
 }
 
 function startTimer() {
-  startTime = Date.now();
+  const startTime = Date.now();
   gameTimer = setInterval(() => {
     const secondsElapsed = Math.floor((Date.now() - startTime) / 1000);
     totalTime = secondsElapsed;
-    timeDisplay.innerHTML = `Time ${formatTime(secondsElapsed)}`;
+    document.getElementById('timer').innerHTML = `Time ${formatTime(secondsElapsed)}`;
   }, 1000);
 }
 
@@ -133,20 +132,16 @@ function toggleHidden(id) {
   document.getElementById(id).classList.toggle('hidden');
 }
 
-const matchSound = document.getElementById('match-sound');
-const noMatchSound = document.getElementById('nomatch-sound');
-const flipSound = document.getElementById('flip-sound');
-const winSound = document.getElementById('win');
-
+/* SOUNDS */
 function playMatchSound() {
-  matchSound.play();
+  document.getElementById('match-sound').play();
 }
 function playNoMatchSound() {
-  noMatchSound.play();
+  document.getElementById('nomatch-sound').play();
 }
 function playFlipSound() {
-  flipSound.play();
+  document.getElementById('flip-sound').play();
 }
 function playWinSounds() {
-  winSound.play();
+  document.getElementById('win').play();
 }
